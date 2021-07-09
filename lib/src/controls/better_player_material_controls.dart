@@ -197,7 +197,7 @@ class _BetterPlayerMaterialControlsState
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                _buildMoreButton(),
+                // _buildMoreButton(),
               ],
             ),
           ),
@@ -304,6 +304,7 @@ class _BetterPlayerMaterialControlsState
               _buildExpandButton()
             else
               const SizedBox(),
+            _buildMoreButton()
           ],
         ),
       ),
