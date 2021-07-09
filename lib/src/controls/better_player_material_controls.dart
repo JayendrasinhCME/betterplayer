@@ -301,9 +301,7 @@ class _BetterPlayerMaterialControlsState
             else
               const SizedBox(),
             if (_controlsConfiguration.enableFullscreen)
-              _buildExpandButton()
-            else
-              const SizedBox(),
+              _buildExpandButton(),
             _buildMoreButton()
           ],
         ),
@@ -330,13 +328,45 @@ class _BetterPlayerMaterialControlsState
         duration: _controlsConfiguration.controlsHideTime,
         child: Container(
           height: _controlsConfiguration.controlBarHeight,
-          margin: const EdgeInsets.only(right: 12.0),
+          // margin: const EdgeInsets.only(right: 12.0),
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Center(
             child: Icon(
               _betterPlayerController!.isFullScreen
                   ? _controlsConfiguration.fullscreenDisableIcon
                   : _controlsConfiguration.fullscreenEnableIcon,
+              color: _controlsConfiguration.iconsColor,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMuteButton(
+      VideoPlayerController? controller,
+      ) {
+    return BetterPlayerMaterialClickableWidget(
+      onTap: () {
+        cancelAndRestartTimer();
+        if (_latestValue!.volume == 0) {
+          _betterPlayerController!.setVolume(_latestVolume ?? 0.5);
+        } else {
+          _latestVolume = controller!.value.volume;
+          _betterPlayerController!.setVolume(0.0);
+        }
+      },
+      child: AnimatedOpacity(
+        opacity: _hideStuff ? 0.0 : 1.0,
+        duration: _controlsConfiguration.controlsHideTime,
+        child: ClipRect(
+          child: Container(
+            height: _controlsConfiguration.controlBarHeight,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Icon(
+              (_latestValue != null && _latestValue!.volume > 0)
+                  ? _controlsConfiguration.muteIcon
+                  : _controlsConfiguration.unMuteIcon,
               color: _controlsConfiguration.iconsColor,
             ),
           ),
@@ -498,37 +528,7 @@ class _BetterPlayerMaterialControlsState
     );
   }
 
-  Widget _buildMuteButton(
-    VideoPlayerController? controller,
-  ) {
-    return BetterPlayerMaterialClickableWidget(
-      onTap: () {
-        cancelAndRestartTimer();
-        if (_latestValue!.volume == 0) {
-          _betterPlayerController!.setVolume(_latestVolume ?? 0.5);
-        } else {
-          _latestVolume = controller!.value.volume;
-          _betterPlayerController!.setVolume(0.0);
-        }
-      },
-      child: AnimatedOpacity(
-        opacity: _hideStuff ? 0.0 : 1.0,
-        duration: _controlsConfiguration.controlsHideTime,
-        child: ClipRect(
-          child: Container(
-            height: _controlsConfiguration.controlBarHeight,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Icon(
-              (_latestValue != null && _latestValue!.volume > 0)
-                  ? _controlsConfiguration.muteIcon
-                  : _controlsConfiguration.unMuteIcon,
-              color: _controlsConfiguration.iconsColor,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+
 
   Widget _buildPlayPause(VideoPlayerController controller) {
     return BetterPlayerMaterialClickableWidget(
